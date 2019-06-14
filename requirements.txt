@@ -1,0 +1,6 @@
+certifi==2019.3.9
+colorz==1.0.3
+PySimpleGUI==3.39.0
+pywal==3.3.0
+selenium==3.141.0
+urllib3==1.25.3
