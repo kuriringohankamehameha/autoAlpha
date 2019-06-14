@@ -10,6 +10,17 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 
+#Enter your Google Chrome Driver Path here.
+CHROME_DRIVER_PATH = "D:/Downloads/Chrome_Driver.exe"
+
+#Enter your Email-Id here.
+EMAIL_ID = "email@example.com"
+
+#Enter your password here.
+"""If you're unsure about directly entering the password, use the methods string_hide and string_reveal,
+ to encrypt the password, atleast when passing as an argument"""
+PASSWORD = "sample_pass"
+
 def min(a,b):
 	if(a > b):
 		return b
@@ -69,7 +80,7 @@ class AlphaGenerator(object):
 		elif self.browser == "Chrome":
 			chrome_options = Options()
 			chrome_options.add_argument("--disable-infobars")
-			self.driver = webdriver.Chrome(executable_path = '/Users/ramachandran/Downloads/chromedriver',chrome_options=chrome_options)
+			self.driver = webdriver.Chrome(executable_path = CHROME_DRIVER_PATH ,chrome_options=chrome_options)
 
 	def assign_values_to_param_set(self, param_set):
 		self.index = find_parameter_index_in_alpha(self.alpha, param_set)
@@ -89,9 +100,9 @@ class AlphaGenerator(object):
 		self.driver.get(url)
 		time.sleep(4)
 		email_id = self.driver.find_element_by_id("email")
-		email_id.send_keys("ram.vijaykrishna@gmail.com")
+		email_id.send_keys(EMAIL_ID)
 		password = self.driver.find_element_by_id("password")
-		password.send_keys(string_reveal("\x97¦©®¨¦±v", 69))
+		password.send_keys(PASSWORD)
 		login_button = self.driver.find_element_by_xpath("//*[@id='root']/div/section/div/article/div/div/form/div[4]/button")
 		login_button.click()
 		time.sleep(2)
