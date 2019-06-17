@@ -13,7 +13,11 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 
 #Enter your Google Chrome Driver Path here.
-CHROME_DRIVER_PATH = "D:\Downloads\chromedriver.exe"
+
+if(sys.platform.startswith('win')):
+	CHROME_DRIVER_PATH = "D:\Downloads\chromedriver.exe"
+else:
+	CHROME_DRIVER_PATH = "/Users/ramachandran/Downloads/chromedriver"
 
 #Enter your Email-Id here.
 EMAIL_ID = "ram.vijaykrishna@gmail.com"
