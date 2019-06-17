@@ -1,2 +1,2 @@
-((adv20 < volume) ? ((-1 * ts_rank(abs(delta(close, 7)), 60)) * sign(delta(close, 7))) : (-1 * 1))
-open,close,high,low
+((adv20 < volume) ? ((-1 * ts_rank(abs(delta([[1]], 7)), 60)) * sign(delta(close, 7))) : (-1 * 1))
+open,close
