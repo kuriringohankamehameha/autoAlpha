@@ -163,14 +163,14 @@ class AlphaGenerator(object):
 
 		self.alpha_list = permute_string_across_parameters(self.alpha, self.number_of_substitutions, self.param_set)
 		
-		while(curr < len(alpha_list)):
+		while(curr < len(self.alpha_list)):
 			click_editor = self.driver.find_element_by_xpath("//*[@id='root']/div/div[2]/div/div[3]/div[2]/div/div[1]/div/div/div/div[1]/div/div[1]/textarea")
 			click_editor.click()
 			write_code = self.driver.find_element_by_xpath("//*[@id='root']/div/div[2]/div/div[3]/div[2]/div/div[1]/div/div/div/div[1]/div/div[1]/div[2]/div[1]/div[4]/div/span/span")
 			time.sleep(2)
 			#if curr != 0:
 				#dummy_alpha = self.alpha.replace(self.param_set[0], self.param_set[curr])
-			dummy_alpha = alpha_list[curr]
+			dummy_alpha = self.alpha_list[curr]
 			#print(dummy_alpha)
 			if self.browser == "Chrome":	
 				write_code.click()
@@ -179,17 +179,17 @@ class AlphaGenerator(object):
 			simulate_button.click()
 			next_button = self.driver.find_element_by_class_name('editor-tabs__new-tab-dropdown-element')
 			next_button.click()
-			time.sleep(20/min(self.max_num_concurrent_simulations,len(alpha_list)))
+			time.sleep(20/min(self.max_num_concurrent_simulations,len(self.alpha_list)))
 			curr += 1
 		
 		curr = 0
 		tab_list = self.driver.find_elements_by_class_name('editor-tabs__tab-inside-element')
 		
-		while(curr < len(alpha_list)):
+		while(curr < len(self.alpha_list)):
 			ActionChains(self.driver).move_to_element(tab_list[curr]).click().perform()
 			refresh_button = self.driver.find_element_by_xpath("//*[@id='alphas-correlation']/div[2]/div/div[1]/div[3]/div[2]")
 			refresh_button.click()
-			time.sleep(20/len(alpha_list))
+			time.sleep(20/len(self.alpha_list))
 			curr += 1
 		
 		curr = 0
@@ -197,7 +197,7 @@ class AlphaGenerator(object):
 
 		#Now go back to retrieve correlations and fetch the results
 		print('Results : ')
-		while(curr < len(self.param_set)):
+		while(curr < len(self.alpha_list)):
 			correlation = self.driver.find_element_by_xpath("//*[@id='alphas-correlation']/div[2]/div/div[1]/div[2]/div[2]")
 			highest_correlation.append(correlation.text)
 			print('****\n')
