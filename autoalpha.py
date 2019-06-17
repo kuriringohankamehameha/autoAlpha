@@ -12,6 +12,17 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 
+#Enter your Google Chrome Driver Path here.
+CHROME_DRIVER_PATH = "D:\Downloads\chromedriver.exe"
+
+#Enter your Email-Id here.
+EMAIL_ID = "ram.vijaykrishna@gmail.com"
+
+#Enter your password here.
+"""If you're unsure about directly entering the password, use the methods string_hide and string_reveal,
+ to encrypt the password, atleast when passing as an argument"""
+PASSWORD = "\x97¦©®¨¦±v"
+
 def min(a,b):
 	if(a > b):
 		return b
@@ -114,7 +125,7 @@ class AlphaGenerator(object):
 		elif self.browser == "Chrome":
 			chrome_options = Options()
 			chrome_options.add_argument("--disable-infobars")
-			self.driver = webdriver.Chrome(executable_path = '/Users/ramachandran/Downloads/chromedriver',chrome_options=chrome_options)
+			self.driver = webdriver.Chrome(executable_path = CHROME_DRIVER_PATH,chrome_options=chrome_options)
 
 	def assign_values_to_param_set(self, param_set):
 		self.index = find_parameter_index_in_alpha(self.alpha, param_set)
@@ -136,9 +147,9 @@ class AlphaGenerator(object):
 		self.driver.get(url)
 		time.sleep(4)
 		email_id = self.driver.find_element_by_id("email")
-		email_id.send_keys("ram.vijaykrishna@gmail.com")
+		email_id.send_keys(EMAIL_ID)
 		password = self.driver.find_element_by_id("password")
-		password.send_keys(string_reveal("\x97¦©®¨¦±v", 69))
+		password.send_keys(string_reveal(PASSWORD, 69))
 		login_button = self.driver.find_element_by_xpath("//*[@id='root']/div/section/div/article/div/div/form/div[4]/button")
 		login_button.click()
 		time.sleep(2)
@@ -196,12 +207,88 @@ class AlphaGenerator(object):
 		time.sleep(20)
 
 		#Now go back to retrieve correlations and fetch the results
-		print('Results : ')
+		aggregate_list = []
+		sharpe_list = []
+		turnover_list = []
+		fitness_list = []
+		returns_list = []
+		margin_list = []
+		
+		print('Results : \n')
 		while(curr < len(self.alpha_list)):
+		
 			correlation = self.driver.find_element_by_xpath("//*[@id='alphas-correlation']/div[2]/div/div[1]/div[2]/div[2]")
 			highest_correlation.append(correlation.text)
-			print('****\n')
+			aggregate_data = self.driver.find_element_by_xpath("//*[@id='alphas-summary']/div/div[2]/div/div[1]/div/div[1]/div[2]")
+			aggregate_list.append(aggregate_data.text)
+			sharpe_data = self.driver.find_element_by_xpath("//*[@id='alphas-summary']/div/div[2]/div/div[1]/div/div[2]/div[2]")
+			sharpe_list.append(sharpe_data.text)
+			turnover = self.driver.find_element_by_xpath("//*[@id='alphas-summary']/div/div[2]/div/div[1]/div/div[3]/div[2]")
+			turnover_list.append(turnover.text)
+			fitness = self.driver.find_element_by_xpath("//*[@id='alphas-summary']/div/div[2]/div/div[1]/div/div[4]/div[2]")
+			fitness_list.append(fitness.text)
+			returns = self.driver.find_element_by_xpath("//*[@id='alphas-summary']/div/div[2]/div/div[1]/div/div[5]/div[2]")
+			returns_list.append(returns.text)
+			margin = self.driver.find_element_by_xpath("//*[@id='alphas-summary']/div/div[2]/div/div[1]/div/div[6]/div[2]")
+			margin_list.append(margin.text)
+			
+			#For yearwise data
+			BASE_XPATH = "//*[@id='alphas-summary']/div/div[2]/div/div[2]/table/tbody/"
+			year_list = []
+			year_sharpe_list = []
+			year_turnover_list = []
+			year_fitness_list = []
+			year_returns_list = []
+			year_margin_list = []
+			year_longcount_list = []
+			year_shortcount_list = []
+			
+			start_year = int((aggregate_data.text.split('-')[0]))
+			end_year = int((aggregate_data.text.split('-')[1]))
+			year_count = end_year - start_year
+			for i in range(start_year, end_year+1):
+				index = 2
+				year_list.append(str(i))
+				year_sharpe_list.append(self.driver.find_element_by_xpath(BASE_XPATH + "tr[" + str(i-start_year+1) + "]" + "/td[" + str(index) + "]").text)
+				index += 1
+				year_turnover_list.append(self.driver.find_element_by_xpath(BASE_XPATH + "tr[" + str(i-start_year+1) + "]" + "/td[" + str(index) + "]").text)
+				index += 1
+				year_fitness_list.append(self.driver.find_element_by_xpath(BASE_XPATH + "tr[" + str(i-start_year+1) + "]" + "/td[" + str(index) + "]").text)
+				index += 1
+				year_returns_list.append(self.driver.find_element_by_xpath(BASE_XPATH + "tr[" + str(i-start_year+1) + "]" + "/td[" + str(index) + "]").text)
+				index += 1
+				year_margin_list.append(self.driver.find_element_by_xpath(BASE_XPATH + "tr[" + str(i-start_year+1) + "]" + "/td[" + str(index) + "]").text)
+				index += 1
+				year_longcount_list.append(self.driver.find_element_by_xpath(BASE_XPATH + "tr[" + str(i-start_year+1) + "]" + "/td[" + str(index) + "]").text)
+				index += 1
+				year_shortcount_list.append(self.driver.find_element_by_xpath(BASE_XPATH + "tr[" + str(i-start_year+1) + "]" + "/td[" + str(index) + "]").text)
+				index += 1
+			
+			if curr != 0:
+				print('****\n')
 			print('For alpha :', self.alpha_list[curr], '\nHighest Correlation :', highest_correlation[curr])
+			print('\n')
+			print("Overall Statistics :")
+			print('Aggregate Data over years', aggregate_list[curr])
+			print('Sharpe =', sharpe_list[curr])
+			print('Turnover =', turnover_list[curr])
+			print('Fitness =', fitness_list[curr])
+			print('Returns =', returns_list[curr])
+			print('Margin =', margin_list[curr])
+			print('\n')
+			
+			print('Yearwise Statistics : ')
+			for i in range(len(year_list)):
+				print('Year:', year_list[i])
+				print('Sharpe:', year_sharpe_list[i])
+				print('Turnover:', year_turnover_list[i])
+				print('Fitness:', year_fitness_list[i])
+				print('Returns:', year_returns_list[i])
+				print('Margin:', year_margin_list[i])
+				print('Long Count:', year_longcount_list[i])
+				print('Short Count:', year_shortcount_list[i])
+				print('\n')
+				
 			print('****\n')
 			curr += 1
 
