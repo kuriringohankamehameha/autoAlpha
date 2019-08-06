@@ -16,12 +16,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 CHROME_DRIVER_PATH = "D:\Downloads\chromedriver.exe"
 
 #Enter your Email-Id here.
-EMAIL_ID = "ram.vijaykrishna@gmail.com"
+EMAIL_ID = ""
 
 #Enter your password here.
 """If you're unsure about directly entering the password, use the methods string_hide and string_reveal,
  to encrypt the password, atleast when passing as an argument"""
-PASSWORD = "\x97¦©®¨¦±v"
+PASSWORD = ""
 
 def min(a,b):
 	if(a > b):
