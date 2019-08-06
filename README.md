@@ -4,4 +4,4 @@
     pip install -r requirements.txt
     ```
 # Screenshot
-![img](https://imgur.com/2UD0ruE "autoAlpha")
+![](https://i.imgur.com/2UD0ruE.png "autoAlpha")
